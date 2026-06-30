@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Reacting to changes in state</title>
+    <link rel='stylesheet' href='https://codepen.io/GreenSock/pen/xxmzBrw.css'>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+        }
+
+        .app {
+            padding: 10px;
+        }
+
+        .box {
+            margin: 1rem auto;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="root" class="panel center text-center"></div>
+    <script src='https://codepen.io/GreenSock/pen/NWoLXRG.js'></script>
+    <script>
+        console.clear();
+
+        import React from "https://esm.sh/react@19.1.0";
+        import ReactDOM from "https://esm.sh/react-dom@19.1.0/client";
+
+        import gsap from "https://esm.sh/gsap";
+        import { useGSAP } from "https://esm.sh/@gsap/react?deps=react@19.1.0";
+
+        const { useRef, useState } = React;
+
+        gsap.registerPlugin(useGSAP);
+
+        const randomX = gsap.utils.random(-200, 200, 1, true);
+
+        function App() {
+            const [endX, setEndX] = useState(0);
+
+            const boxRef = useRef();
+            const container = useRef();
+
+            useGSAP(() => {
+                gsap.to(".box", {
+                    x: endX,
+                    duration: 1
+                });
+
+            }, { dependencies: [endX], scope: container });
+
+            return /*#__PURE__*/(
+                React.createElement("div", { ref: container, className: "app" }, /*#__PURE__*/
+                    React.createElement("button", { onClick: () => setEndX(randomX()) }, "Pass in a randomized value"), /*#__PURE__*/
+
+                    React.createElement("div", { className: "box gradient-blue", ref: boxRef }, endX)));
+
+
+        }
+
+
+
+
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render( /*#__PURE__*/React.createElement(App, null));    
+    </script>
+
+</body>
+
+</html>
